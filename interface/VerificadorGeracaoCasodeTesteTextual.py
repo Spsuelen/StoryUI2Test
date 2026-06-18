@@ -38,7 +38,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 def gerar_casos_teste(historia_json, score_minimo=0.7):
-    chave_api = "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"
+    chave_api = "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"
     os.environ["OPENAI_API_KEY"] = chave_api
     client = OpenAI(api_key=chave_api)
 
