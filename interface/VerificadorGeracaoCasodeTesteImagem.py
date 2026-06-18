@@ -41,7 +41,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = "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"
 client = OpenAI()
 MODEL_NAME = "gpt-4o-mini"
 
