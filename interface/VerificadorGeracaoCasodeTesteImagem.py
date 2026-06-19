@@ -58,7 +58,7 @@ def analyze_screen(image_bytes):
 
     prompt = (
         "Analise esta screenshot de interface e descreva objetivamente o que voce observa.\n"
-        "Identifique os elements interativos (campos, botoes, icones) e proponha casos de teste baseados exclusivamente no que esta visivel.\n"
+        "Identifique os elementos interativos (campos, botoes, icones) e proponha casos de teste baseados exclusivamente no que esta visivel.\n"
         "Use os nomes e labels exatamente como aparecem na tela.\n"
         "Responda APENAS em JSON valido, sem markdown, seguindo esta estrutura:\n\n"
         "{\n"

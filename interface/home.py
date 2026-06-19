@@ -1,5 +1,10 @@
 import streamlit as st
 import os
+import re
+from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 st.set_page_config(page_title="Pipeline de Engenharia de Requisitos e QA", layout="wide")
 
@@ -128,9 +133,10 @@ else:
         st.error(f"Módulo não autorizado: {caminho_arquivo}")
         st.stop()
     try:
-        with open(caminho_arquivo, "r", encoding="utf-8") as f:
+        script_dir = Path(__file__).resolve().parent
+        with open(script_dir / caminho_arquivo, "r", encoding="utf-8") as f:
             codigo_da_tela = f.read()
-        codigo_da_tela = codigo_da_tela.replace("st.set_page_config", "# st.set_page_config")
+        codigo_da_tela = re.sub(r'^st\.set_page_config', '# st.set_page_config', codigo_da_tela, flags=re.MULTILINE)
         exec(codigo_da_tela, {})
     except FileNotFoundError:
         st.error(f"Erro Crítico: O script `{caminho_arquivo}` não foi encontrado no diretório atual.")

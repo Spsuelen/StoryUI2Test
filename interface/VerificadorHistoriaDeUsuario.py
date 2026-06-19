@@ -10,6 +10,9 @@ from dataclasses import dataclass, asdict
 from typing import List, Optional
 from difflib import SequenceMatcher
 from itertools import combinations
+import pypdf
+import docx
+import csv
 
 st.set_page_config(page_title="Analisador de Histórias de Usuário", layout="wide")
 
@@ -54,10 +57,6 @@ def inicializar_modelos():
 
 
 nlp, ner_model = inicializar_modelos()
-
-import pypdf
-import docx
-import csv
 
 @dataclass
 class AppExtraido:
@@ -324,7 +323,7 @@ else:
 
             apps_h1 = set(a['nome'] for a in h1['apps'])
             apps_h2 = set(a['nome'] for a in h2['apps'])
-            apps_comuns = apps_h1 & apps_comuns if 'apps_comuns' in locals() else (apps_h1 & apps_h2)
+            apps_comuns = apps_h1 & apps_h2
 
             if not apps_comuns:
                 continue
@@ -341,7 +340,7 @@ else:
             for c in lista_conflitos:
                 st.error(c)
         else:
-            st.success("Nenhuns conflito de regras ou ações contraditórias identificado.")
+            st.success("Nenhum conflito de regras ou ações contraditórias identificado.")
 
         st.subheader("Lista de Histórias Processadas")
 
