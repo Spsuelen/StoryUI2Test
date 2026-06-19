@@ -3,7 +3,6 @@ import pandas as pd
 import re
 import zipfile
 import json
-import os
 import io
 import spacy
 from transformers import pipeline
@@ -45,32 +44,12 @@ st.markdown("""
 
 @st.cache_resource
 def inicializar_modelos():
-    try:
-        import pypdf
-    except ImportError:
-        os.system("python -m pip install pypdf")
-        
-    try:
-        import docx
-    except ImportError:
-        os.system("python -m pip install python-docx")
-
-    try:
-        nlp_model = spacy.load("pt_core_news_sm")
-    except Exception:
-        os.system("python -m spacy download pt_core_news_sm")
-        nlp_model = spacy.load("pt_core_news_sm")
-
-    try:
-        ner_pipe = pipeline(
-            "ner",
-            model="Jean-Baptiste/roberta-large-ner-english",
-            aggregation_strategy="simple"
-        )
-    except Exception as e:
-        st.error("Erro de Conexão: Não foi possível realizar o download do modelo Jean-Baptiste/roberta-large-ner-english. Certifique-se de que possui uma conexão ativa com a internet e reinicie o aplicativo.")
-        st.stop()
-
+    nlp_model = spacy.load("pt_core_news_sm")
+    ner_pipe = pipeline(
+        "ner",
+        model="Jean-Baptiste/roberta-large-ner-english",
+        aggregation_strategy="simple"
+    )
     return nlp_model, ner_pipe
 
 
