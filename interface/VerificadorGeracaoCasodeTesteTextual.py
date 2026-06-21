@@ -38,9 +38,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 def gerar_casos_teste(historia_json, score_minimo=0.7):
-    chave_api = "INSIRA SUA CHAVE AQUI"
-    os.environ["OPENAI_API_KEY"] = chave_api
-    client = OpenAI(api_key=chave_api)
+    client = OpenAI()
 
     prompt_partes = []
 
