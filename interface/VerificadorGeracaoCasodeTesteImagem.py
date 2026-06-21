@@ -7,6 +7,7 @@ import io
 import time
 import base64
 from openai import OpenAI
+import pypdf
 
 st.set_page_config(page_title="Gerador de Casos de Teste baseados em Imagens", layout="wide")
 
@@ -41,7 +42,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-os.environ["OPENAI_API_KEY"] = "INSIRA SUA CHAVE AQUI"
 client = OpenAI()
 MODEL_NAME = "gpt-4o-mini"
 
@@ -58,7 +58,7 @@ def analyze_screen(image_bytes):
 
     prompt = (
         "Analise esta screenshot de interface e descreva objetivamente o que voce observa.\n"
-        "Identifique os elements interativos (campos, botoes, icones) e proponha casos de teste baseados exclusivamente no que esta visivel.\n"
+        "Identifique os elementos interativos (campos, botoes, icones) e proponha casos de teste baseados exclusivamente no que esta visivel.\n"
         "Use os nomes e labels exatamente como aparecem na tela.\n"
         "Responda APENAS em JSON valido, sem markdown, seguindo esta estrutura:\n\n"
         "{\n"
@@ -131,12 +131,6 @@ else:
         st.subheader("Console de Monitoramento")
         log_terminal = st.empty()
         texto_logs = ""
-
-        try:
-            import pypdf
-        except ImportError:
-            os.system("python -m pip install pypdf")
-            import pypdf
 
         with zipfile.ZipFile(uploaded_file, 'r') as zip_ref:
             extensoes_suportadas = (".png", ".jpg", ".jpeg", ".webp", ".bmp", ".pdf")

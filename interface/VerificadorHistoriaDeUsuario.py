@@ -3,7 +3,6 @@ import pandas as pd
 import re
 import zipfile
 import json
-import os
 import io
 import spacy
 from transformers import pipeline
@@ -11,6 +10,9 @@ from dataclasses import dataclass, asdict
 from typing import List, Optional
 from difflib import SequenceMatcher
 from itertools import combinations
+import pypdf
+import docx
+import csv
 
 st.set_page_config(page_title="Analisador de Histórias de Usuário", layout="wide")
 
@@ -45,40 +47,16 @@ st.markdown("""
 
 @st.cache_resource
 def inicializar_modelos():
-    try:
-        import pypdf
-    except ImportError:
-        os.system("python -m pip install pypdf")
-        
-    try:
-        import docx
-    except ImportError:
-        os.system("python -m pip install python-docx")
-
-    try:
-        nlp_model = spacy.load("pt_core_news_sm")
-    except Exception:
-        os.system("python -m spacy download pt_core_news_sm")
-        nlp_model = spacy.load("pt_core_news_sm")
-
-    try:
-        ner_pipe = pipeline(
-            "ner",
-            model="Jean-Baptiste/roberta-large-ner-english",
-            aggregation_strategy="simple"
-        )
-    except Exception as e:
-        st.error("Erro de Conexão: Não foi possível realizar o download do modelo Jean-Baptiste/roberta-large-ner-english. Certifique-se de que possui uma conexão ativa com a internet e reinicie o aplicativo.")
-        st.stop()
-
+    nlp_model = spacy.load("pt_core_news_sm")
+    ner_pipe = pipeline(
+        "ner",
+        model="Jean-Baptiste/roberta-large-ner-english",
+        aggregation_strategy="simple"
+    )
     return nlp_model, ner_pipe
 
 
 nlp, ner_model = inicializar_modelos()
-
-import pypdf
-import docx
-import csv
 
 @dataclass
 class AppExtraido:
@@ -345,7 +323,7 @@ else:
 
             apps_h1 = set(a['nome'] for a in h1['apps'])
             apps_h2 = set(a['nome'] for a in h2['apps'])
-            apps_comuns = apps_h1 & apps_comuns if 'apps_comuns' in locals() else (apps_h1 & apps_h2)
+            apps_comuns = apps_h1 & apps_h2
 
             if not apps_comuns:
                 continue
@@ -362,7 +340,7 @@ else:
             for c in lista_conflitos:
                 st.error(c)
         else:
-            st.success("Nenhuns conflito de regras ou ações contraditórias identificado.")
+            st.success("Nenhum conflito de regras ou ações contraditórias identificado.")
 
         st.subheader("Lista de Histórias Processadas")
 
